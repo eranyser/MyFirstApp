@@ -1,0 +1,109 @@
+{
+	"rulesDirectory": [
+		"./node_modules/tslint-eslint-rules/dist/rules",
+		"./node_modules/codelyzer",
+		"./config/lintRules"
+	],
+	"excludeFiles": [
+		"**/*.spec.ts",
+		"./src/custom-typings.d.ts"
+	],
+	"rules": {
+		"eofline": false,
+		"member-ordering": [
+			true,
+			"public-before-private",
+			"static-before-instance",
+			"variables-before-functions"
+		],
+		"no-var-keyword": true,
+		"whitespace": [
+			true,
+			"check-branch",
+			"check-operator"
+		],
+		"triple-equals": [
+			true,
+			"allow-null-check"
+		],
+		"class-name": true,
+		"semicolon": [
+			true,
+			"always"
+		],
+		"curly": true,
+		"no-use-before-declare": true,
+		"no-duplicate-variable": true,
+		"forin": true,
+		"max-line-length": [
+			true,
+			200
+		],
+		"no-shadowed-variable": true,
+		"interface-name": true,
+		"no-unused-expression": true,
+		"variable-name": [
+			true,
+			"allow-leading-underscore",
+			"check-format"
+		],
+		"trailing-comma": false,
+		"no-trailing-whitespace": false,
+		"indent": [
+			true,
+			"tabs"
+		],
+		"no-eval": true,
+		"component-or-container-class-suffix": true,
+		"directive-class-suffix": true,
+		"one-line": [
+			true,
+			"check-open-brace",
+			"check-catch",
+			"check-else"
+		],// the following are from codelyzer
+		"directive-selector": [true, "attribute", "alg", "kebab-case"],
+		"component-selector": [true, "element", "alg", "kebab-case"],
+		"pipe-naming": [true, "camelCase", ["alg"]],
+		"use-input-property-decorator": true,
+		"use-output-property-decorator": true,
+		"use-host-property-decorator": true,
+		"no-attribute-parameter-decorator": false,
+		"no-arg": true,
+		"no-input-rename": true,
+		"no-output-rename": true,
+		"no-construct": true,
+		"no-forward-ref": false,
+		"use-life-cycle-interface": true,
+		"use-pipe-transform-interface": true,
+		 // the following are from tslint-eslint-rules
+		"no-duplicate-case": true,
+		"no-ex-assign": false,
+		"no-extra-boolean-cast": true,
+		"no-extra-semi": true,
+		"no-invalid-regexp": true,
+		"no-regex-spaces": true,
+		"no-sparse-arrays": true,
+		"no-unexpected-multiline": true,
+		"use-isnan": true,
+		"valid-jsdoc": [
+			false,
+			{
+				"prefer": {
+					"returns": "return"
+				},
+				"requireReturn": false,
+				"requireParamDescription": true,
+				"requireReturnDescription": true,
+				"matchDescription": "^[A-Z][A-Za-z0-9\\s]*[.]$"
+			}
+		],
+		"valid-typeof": true,
+		"handle-callback-err": [
+			true,
+			"^(err|error)$"
+		],
+		"import-destructuring-spacing": false
+
+	}
+}

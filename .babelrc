@@ -1,0 +1,34 @@
+{
+	"presets": [
+		[
+			"env",
+			{
+				"targets": [
+					"last 1 version"
+				],
+				"modules": false
+			}
+		]
+	],
+	"plugins": [
+		"angular2-annotations",
+		"transform-decorators-legacy"
+	],
+	"sourceMaps": true,
+	"env": {
+		"test": {
+			"sourceMaps": "both",
+			"presets": [
+				[
+					"env",
+					{
+						"targets": [
+							"chrome"
+						],
+						"modules": false
+					}
+				]
+			]
+		}
+	}
+}

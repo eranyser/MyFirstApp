@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="">
+<head>
+
+    <title><%= htmlWebpackPlugin.options.metadata.title %></title>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="<%= htmlWebpackPlugin.options.metadata.title %>">
+	<link rel="stylesheet" href="assets/css/loading.css">
+	<% if (webpackConfig.htmlElements.headTags) { %>
+	<!-- Configured Head Tags  -->
+	<%= webpackConfig.htmlElements.headTags %>
+	<% } %>
+    <!-- base url -->
+    <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+	<script>
+		window.baseUrl ="<%= htmlWebpackPlugin.options.metadata.baseUrl %>";
+	</script>
+
+</head>
+<body class="default">
+<alg-app>
+	<div class="entire-body-div">
+		<div class="loading-div">
+			<img width="30%" src="assets/img/carestream_logo_white.png"/>
+			<div class="loading-text-div">
+				Loading
+			</div>
+			<div class="cs-loader">
+				<div class="cs-loader-inner">
+					<label>	●</label>
+					<label>	●</label>
+					<label>	●</label>
+					<label>	●</label>
+					<label>	●</label>
+					<label>	●</label>
+				</div>
+			</div>
+		</div>
+	</div>
+</alg-app>
+<!--todo:add Google Analytics etc here -->
+<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</body>
+</html>
