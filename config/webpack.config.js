@@ -19,35 +19,19 @@ module.exports = function webpackConfig (options = {}) {
 		ENV: ENV,
 		HMR: HMR,
 		coverage: eval(helpers.getOption('coverage', options, true)),
-		SERVER_IP: 'http://' + helpers.getOption('IMAGINET_APP_SERVER', options, 'localhost'),
 		title: 'Carestream Vue PACS Web',
 		baseUrl: helpers.getOption('CLIENT_BASE_URL', options, undefined) || '.',
 		isDevServer: helpers.isWebpackDevServer(),
-		CHROME_EXT_ID: helpers.getOption('CHROME_EXT_ID', options, 'olejbabgoknafhaoapecbnejjlkankfi'),
-		APP_SERVER: helpers.getOption('IMAGINET_APP_SERVER', options, 'localhost'),
-		SHOW_STORE_DEV: helpers.getOption('SHOW_STORE_DEV', options, false),
-		USE_DIRECT_SERVER_URL: helpers.getOption('USE_DIRECT_SERVER_URL', options, false),
-		LOG_LEVEL: helpers.getOption('LOG_LEVEL', options),
-		LOG_SRC: helpers.getOption('LOG_SRC', options, (ENV === 'production')),
-		//whether to get the images directly from the server to the imagebox or through a blob (previously chrome workaround)
-		HTTP_IMAGES: helpers.getOption('HTTP_IMAGES', options, false),
+		AOT: helpers.getOption('AOT', options, 'localhost'),
 	};
 	if (metaData.baseUrl !== '.')
 		metaData.baseUrl = '/' + metaData.baseUrl;
 
 	if (!metaData.silent) { // please keep any console.logs only inside this block
-		console.log('setting USE_DIRECT_SERVER_URL:', metaData.USE_DIRECT_SERVER_URL);
 		console.log('Using BaseUrl of ', metaData.baseUrl);
-		console.log('CHROME_EXT_ID = ' + metaData.CHROME_EXT_ID);
-		console.log('Application API server is ' + metaData.APP_SERVER + ' LogLevel is ' + metaData.LOG_LEVEL + " LogSrc = " + metaData.LOG_SRC);
-		console.log('Using SERVER_IP environment variable as: ' + metaData.SERVER_IP);
 		if (ENV === 'test') {
 			console.log('coverage is ' + ((metaData.coverage) ? 'enabled' : 'disabled!'));
 		}
-		if (metaData.SHOW_STORE_DEV) {
-			console.warn('will show store logger - performance will be degraded!');
-		}
-		console.log('HTTP_IMAGES = ' + metaData.HTTP_IMAGES);
 	}
 	const webpackPlugins = require('./webpack.plugins.js')(metaData);
 	const config = webpackMerge(commonConfig(options), {
@@ -65,14 +49,7 @@ module.exports = function webpackConfig (options = {}) {
 			stats: {modules: false, timings: true, assets: true, chunkModules: false, reasons: false},
 			historyApiFallback: true,
 			proxy: {
-				'/portal/*': {
-					target: metaData.SERVER_IP,
-					secure: false,
-					bypass: (req, res) => {
-						console.log("Node did a proxy bypass to remote server.");
-						return false;
-					}
-				}
+				//WRITE PROXY CONFIG HERE
 			},
 			watchOptions: {
 				aggregateTimeout: 300,
@@ -88,9 +65,9 @@ module.exports = function webpackConfig (options = {}) {
 	if (ENV !== 'test') {
 		config.output = {
 			path: helpers.root('dist'),
-			filename: '[name].[chunkhash].bundle.js',
-			sourceMapFilename: '[name].[chunkhash].bundle.map',
-			chunkFilename: '[id].[chunkhash].chunk.js',
+			filename: '[name].[hash].bundle.js',
+			sourceMapFilename: '[name].[hash].bundle.map',
+			chunkFilename: '[id].[hash].chunk.js',
 		};
 	}
 

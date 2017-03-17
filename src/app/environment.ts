@@ -1,25 +1,38 @@
-import {enableProdMode, ApplicationRef} from "@angular/core";
-import {enableDebugTools, disableDebugTools} from "@angular/platform-browser";
-
 // Angular 2
-console.log('environment set to :', ENV);
+import {
+	enableDebugTools,
+	disableDebugTools
+} from '@angular/platform-browser';
+import {
+	ApplicationRef,
+	enableProdMode
+} from '@angular/core';
 // Environment Providers
-let PROVIDERS = [
+let PROVIDERS: any[] = [
 	// common env directives
 ];
 
 // Angular debug tools in the dev console
 // https://github.com/angular/angular/blob/86405345b781a9dc2438c0fbe3e9409245647019/TOOLS_JS.md
-let _decorateModuleRef = function identity<T>(value: T): T {
-	return value;
-};
+let _decorateModuleRef = <T>(value: T): T => {return value;};
 
 if ('production' === ENV) {
-	// Production
-	disableDebugTools();
 	enableProdMode();
+
+	// Production
+	_decorateModuleRef = (modRef: any) => {
+		disableDebugTools();
+
+		return modRef;
+	};
+
+	PROVIDERS = [
+		...PROVIDERS,
+		// custom providers in production
+	];
+
 } else {
-	// Development
+
 	_decorateModuleRef = (modRef: any) => {
 		const appRef = modRef.injector.get(ApplicationRef);
 		const cmpRef = appRef.components[0];
@@ -30,8 +43,17 @@ if ('production' === ENV) {
 		(<any>window).ng.coreTokens = _ng.coreTokens;
 		return modRef;
 	};
+
+	// Development
+	PROVIDERS = [
+		...PROVIDERS,
+		// custom providers in development
+	];
+
 }
+
 export const decorateModuleRef = _decorateModuleRef;
+
 export const ENV_PROVIDERS = [
 	...PROVIDERS
 ];

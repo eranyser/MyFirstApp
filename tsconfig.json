@@ -31,7 +31,6 @@
 	"awesomeTypescriptLoaderOptions": {
 		"resolveGlobs": true,
 		"forkChecker": true,
-		"useBabel": true,
 		"useCache": true,
 		"useWebpackText": true
 	},

@@ -4,6 +4,8 @@ const tsConfig = require('../tsconfig.json');
 
 module.exports = function (metadata, plugins) {
 	const TEST = (metadata.ENV === 'test');
+	const AOT = (metadata.AOT === true);
+	const isProd = (metadata.ENV  ==='production');
 
 	const SassOptions = {
 		sourceMap: true
@@ -14,7 +16,21 @@ module.exports = function (metadata, plugins) {
 			"typescript": {
 				test: /\.ts$/,
 				use: [
-					// {loader: '@angularclass/hmr-loader'},
+					{
+						loader: '@angularclass/hmr-loader',
+						options: {
+							pretty: !isProd,
+							prod: isProd
+						}
+					},
+					{ // MAKE SURE TO CHAIN VANILLA JS CODE, I.E. TS COMPILATION OUTPUT.
+						loader: 'ng-router-loader',
+						options: {
+							loader: 'async-import',
+							genDir: 'compiled',
+							aot: AOT
+						}
+					},
 					{
 						loader: 'awesome-typescript-loader',
 						options: {
@@ -22,6 +38,7 @@ module.exports = function (metadata, plugins) {
 								"sourceMaps": false,
 								"inlineSourceMap": true
 							}) : tsConfig.compilerOptions,
+							configFileName: 'tsconfig.webpack.json',
 							transpileOnly: TEST,
 							sourceMap: true,
 							inlineSourceMap: TEST
@@ -29,6 +46,7 @@ module.exports = function (metadata, plugins) {
 					},
 					{ loader: 'angular2-template-loader' }
 				],
+				exclude: [/\.(spec|e2e)\.ts$/]
 				// exclude: [/node_modules/]
 			},
 			"es6": {
@@ -51,22 +69,25 @@ module.exports = function (metadata, plugins) {
 					}
 				}],
 			},
-			"glsl": {
-				test: /\.(glsl|frag|vert)$/, use: [{ loader: 'raw-loader' }, { loader: 'glslify-loader' }], exclude: /node_modules/
-			}
-			,
 			"json": {
 				test: /\.json$/, use: [{ loader: 'json-loader' }]
-			}
-			,
+			},
 			"css": {
 				test: /\.css$/,
+				exclude: [/\.component\.css/],
 				use: TEST ? [{ loader: 'empty-loader' }]
 					:
-					[{ loader: 'style-loader' }, {
-						loader: 'css-loader',
-						options: { sourceMap: true, minimize: false }
-					}
+					[{ loader: 'style-loader' },
+						{ loader: 'css-loader', options: { sourceMap: true } },
+						{ loader: 'postcss-loader' }, //postcss options is given via LoaderOptionsPlugin
+					],
+			},
+			"componentCss": {
+				test: /component\.css$/,
+				use: TEST ? [{ loader: 'empty-loader' }]
+					:
+					[{ loader: 'css-to-string-loader' }, { loader: 'css-loader', options: { sourceMap: true } },
+						{ loader: 'postcss-loader' }, //postcss options is given via LoaderOptionsPlugin
 					],
 			},
 			"woff": {

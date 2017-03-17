@@ -4,9 +4,9 @@
 import {platformBrowserDynamic} from "@angular/platform-browser-dynamic";
 import {decorateModuleRef} from "./app/environment";
 import {PackageID, log} from "./app/common/services/log";
-import {openMultiMonitorPopup, getMonitorDisplayInfo} from "./app/common/models/monitors.info.token";
+import {bootloader} from '@angularclass/hmr';
 import {AppModule} from "./app";
-import "./svg-spritemap.loader.js";
+// import "./svg-spritemap.loader.js"; /// this allows for SVG icons
 /*
  * App Module
  * our top level module that holds all of our components
@@ -15,26 +15,15 @@ import "./svg-spritemap.loader.js";
 /*
  * Bootstrap our Angular app with a top level NgModule
  */
-export function main(hmrState: any = undefined): Promise<any> {
+
+
+export function main(): Promise<any> {
 	return platformBrowserDynamic()
 		.bootstrapModule(AppModule)
 		.then(decorateModuleRef)
-		.catch(err => console.error(err));
+		.catch((err) => console.error(err));
 }
 
-
-function doBootstrap() {
-	if ('development' === ENV && HMR === true) {
-		// activate hot module reload
-		let ngrxHmr = require('ngrx-store-hmr/lib/index').hotModuleReplacement;
-		ngrxHmr(main, module);
-	} else {
-		// bootstrap when document is ready
-		if (/comp|inter|loaded/.test(document.readyState)) {
-			main();
-		} else {
-			document.addEventListener('DOMContentLoaded', () => main());
-		}
-	}
-}
-
+// needed for hmr
+// in prod this is replace for document ready
+bootloader(main);
