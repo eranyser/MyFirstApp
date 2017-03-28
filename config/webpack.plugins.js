@@ -12,6 +12,7 @@ const AddAssetHtmlPlugin = require('add-asset-html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const ContextReplacementPlugin = require('webpack/lib/ContextReplacementPlugin');
 // const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CheckerPlugin = require('awesome-typescript-loader').CheckerPlugin;
 // const TsConfigPathsPlugin = require('awesome-typescript-loader').TsConfigPathsPlugin;
@@ -29,11 +30,23 @@ const OptimizeJsPlugin = require('optimize-js-plugin');
 const webpackMerge = require('webpack-merge');
 const ScriptExtHtmlWebpackPlugin = require('script-ext-html-webpack-plugin');
 const path = require('path');
+const ngcWebpack = require('ngc-webpack');
+const AssetsPlugin = require('assets-webpack-plugin');
+
 // const CompressionPlugin = require('compression-webpack-plugin');// does not work on windows currently
 // const SplitByPathPlugin = require('webpack-split-by-path'); // not compatible with worker loader - disbaled for now
 
 module.exports = function (metadata) {
 	const plugins = {
+		"assets":  new AssetsPlugin({
+			                            path: helpers.root('dist'),
+			                            filename: 'webpack-assets.json',
+			                            prettyPrint: true
+		                            }),
+		"ngc": new ngcWebpack.NgcWebpackPlugin({disabled: !metadata.AOT,
+			                                       tsConfig: helpers.root('tsconfig.webpack.json'),
+			                                       resourceOverride: helpers.root('config/resource-override.js')
+		                                       }),
 		"fix": new webpack.ContextReplacementPlugin( 	//see https://github.com/angular/angular/issues/11580
 			// The (\\|\/) piece accounts for path separators in *nix and Windows
 			/angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
@@ -55,6 +68,21 @@ module.exports = function (metadata) {
 		// 	$: "jquery",
 		// 	jQuery: "jquery"
 		// }),
+		/**
+		 * Plugin: ContextReplacementPlugin
+		 * Description: Provides context to Angular's use of System.import
+		 *
+		 * See: https://webpack.github.io/docs/list-of-plugins.html#contextreplacementplugin
+		 * See: https://github.com/angular/angular/issues/11580
+		 */
+
+		"ngRoutesContext":new ContextReplacementPlugin(
+			// The (\\|\/) piece accounts for path separators in *nix and Windows
+			/angular(\\|\/)core(\\|\/)src(\\|\/)linker/,
+			helpers.root('src'), // location of your src
+			{
+				// your Angular Async Route paths relative to this root directory
+			}),
 		"html": new HtmlWebpackPlugin({ // https://github.com/ampedandwired/html-webpack-plugin
 			minify: (metadata.ENV === 'production') ? { removeComments: true } : false, // https://github.com/kangax/html-minifier#options-quick-reference
 			metadata: metadata,

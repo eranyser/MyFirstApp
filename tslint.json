@@ -2,7 +2,7 @@
 	"rulesDirectory": [
 		"./node_modules/tslint-eslint-rules/dist/rules",
 		"./node_modules/codelyzer",
-		"./config/lintRules"
+		"./node_modules/@algotec/lint-rules"
 	],
 	"excludeFiles": [
 		"**/*.spec.ts",

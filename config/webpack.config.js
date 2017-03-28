@@ -19,10 +19,10 @@ module.exports = function webpackConfig (options = {}) {
 		ENV: ENV,
 		HMR: HMR,
 		coverage: eval(helpers.getOption('coverage', options, true)),
-		title: 'Carestream Vue PACS Web',
+		title: 'Carestream Base Angular Web App',
 		baseUrl: helpers.getOption('CLIENT_BASE_URL', options, undefined) || '.',
 		isDevServer: helpers.isWebpackDevServer(),
-		AOT: helpers.getOption('AOT', options, 'localhost'),
+		AOT: helpers.getOption('AOT', options, false),
 	};
 	if (metaData.baseUrl !== '.')
 		metaData.baseUrl = '/' + metaData.baseUrl;
@@ -60,7 +60,6 @@ module.exports = function webpackConfig (options = {}) {
 
 	if (ENV === 'test') {
 		config.entry = './config/spec-bundle.js';
-		config.plugins.push(new webpack.NormalModuleReplacementPlugin(/ribbon-tab-items\.data/, require.resolve('../src/app/viewer/ribbon/data/ribbon-no-tab-items.test-data.ts')))
 	}
 	if (ENV !== 'test') {
 		config.output = {

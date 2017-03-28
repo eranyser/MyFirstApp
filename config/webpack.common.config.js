@@ -1,13 +1,15 @@
 const helpers = require("./helpers.js");
 
 module.exports = function (options) {
+	const AOT = helpers.getOption('AOT', options, false);
 	const ENV = options.env || process.env.NODE_ENV || 'development';
 	return {
 		devtool: (ENV === 'production') ? 'source-map' : 'inline-source-map',
 		entry: {
 			'polyfills': './src/polyfills.browser.ts',
 			'vendor':'./src/vendor.browser.ts',
-			'main': './src/main.browser.ts'
+			'main':      AOT ? './src/main.browser.aot.ts' :
+				'./src/main.browser.ts'
 		},
 		resolve: {
 			/*
