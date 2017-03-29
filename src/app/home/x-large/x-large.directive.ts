@@ -12,7 +12,7 @@ import {
 	selector: '[alg-x-large]' // using [ ] means selecting attributes
 })
 export class XLargeDirective {
-	constructor(public element: ElementRef,public renderer: Renderer2) {
+	constructor(public element: ElementRef, public renderer: Renderer2) {
 		// simple DOM manipulation to set font size to x-large
 		// `nativeElement` is the direct reference to the DOM element
 		// element.nativeElement.style.fontSize = 'x-large';

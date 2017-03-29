@@ -22,7 +22,7 @@ module.exports = function webpackConfig (options = {}) {
 		title: 'Carestream Base Angular Web App',
 		baseUrl: helpers.getOption('CLIENT_BASE_URL', options, undefined) || '.',
 		isDevServer: helpers.isWebpackDevServer(),
-		AOT: helpers.getOption('AOT', options, false),
+		AOT: Boolean(helpers.getOption('AOT', options, false)),
 	};
 	if (metaData.baseUrl !== '.')
 		metaData.baseUrl = '/' + metaData.baseUrl;
@@ -69,6 +69,5 @@ module.exports = function webpackConfig (options = {}) {
 			chunkFilename: '[id].[hash].chunk.js',
 		};
 	}
-
 	return config;
 };

@@ -28,8 +28,7 @@
 	],
 	"exclude": [
 		"dist",
-		"node_modules",
-		"node_v1"
+		"node_modules"
 	],
 	"awesomeTypescriptLoaderOptions": {
 		"resolveGlobs": true,
