@@ -1,11 +1,5 @@
 import {NO_ERRORS_SCHEMA} from '@angular/core';
-import {
-	inject,
-	async,
-	TestBed,
-	ComponentFixture
-} from '@angular/core/testing';
-
+import {async, ComponentFixture, TestBed} from '@angular/core/testing';
 // Load the implementations that should be tested
 import {AppComponent} from './app.component';
 import {AppState} from './app.service';
@@ -37,10 +31,10 @@ describe(`App`, () => {
 		expect(comp).toBeDefined();
 	});
 
-	it(`should be @AngularClass`, () => {
-		expect(comp.url).toEqual('https://twitter.com/AngularClass');
-		expect(comp.log).toEqual('assets/img/angularclass-avatar.png');
-		expect(comp.name).toEqual('Angular 2 Webpack Starter');
+	it(`should be @Algotec`, () => {
+		expect(comp.url).toEqual('http://git-srv:8080/tfs/DefaultCollection/web-common/_git/angular-app-base');
+		expect(comp.logo).toEqual('assets/img/carestream_logo.png');
+		expect(comp.name).toEqual('Angular App Base @Algotec');
 	});
 
 	it('should log ngOnInit', () => {

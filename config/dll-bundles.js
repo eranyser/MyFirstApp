@@ -1,6 +1,6 @@
 module.exports = {
 	polyfills: [
-		'core-js',
+		'@algotec/browser-helpers',
 		'zone.js'
 	],
 	vendor: [

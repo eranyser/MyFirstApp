@@ -20,7 +20,7 @@
 			"es2017"
 		],
 		"typeRoots": [ "./node_modules/@types" ],
-		"outDir": "./ngfactory",
+		"outDir": "./compiled",
 		"rootDir": "./src/app"
 	},
 	"files": [

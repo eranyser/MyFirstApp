@@ -6,27 +6,27 @@ describe('App', () => {
 		browser.get('/');
 	});
 
-	it('should have a title', () => {
-		let subject = browser.getTitle();
-		let result = 'Angular App Base @Algotec';
+	it('should have a title', async () => {
+		const subject = await browser.getTitle();
+		const result = 'Angular App Base @Algotec';
 		expect(subject).toEqual(result);
 	});
 
-	it('should have header', () => {
-		let subject = element(by.css('h1')).isPresent();
-		let result = true;
+	it('should have header', async () => {
+		const subject = await element(by.css('h1')).isPresent();
+		const result = true;
 		expect(subject).toEqual(result);
 	});
 
-	it('should have <home>', () => {
-		let subject = element(by.css('app home')).isPresent();
-		let result = true;
+	it('should have <home> ', async () => {
+		const subject = await element(by.css('app home')).isPresent();
+		const result = true;
 		expect(subject).toEqual(result);
 	});
 
-	it('should have buttons', () => {
-		let subject = element(by.css('button')).getText();
-		let result = 'Submit Value';
+	it('should have buttons', async () => {
+		const subject = await element(by.css('button')).getText();
+		const result = 'Submit Value';
 		expect(subject).toEqual(result);
 	});
 

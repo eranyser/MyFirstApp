@@ -1,18 +1,28 @@
 "use strict";
 const helpers = require('./helpers');
 const tsConfig = require('../tsconfig.json');
+const path = require('path');
 
+
+const loaderObjects = { // it is important to return a new object every time - we use getters for this
+		get css () {
+			return {loader: 'css-loader', options: {sourceMap: true}}
+		},
+		get sass () {
+			return {loader: 'sass-loader', options: {sourceMap: true}}
+		},
+		get postCss () {
+			return {loader: 'postcss-loader', options: {sourceMap: true}}
+		}
+	}
+;
 module.exports = function (metadata, plugins) {
 	const TEST = (metadata.ENV === 'test');
 	const AOT = (metadata.AOT === true);
-	const isProd = (metadata.ENV  ==='production');
-
-	const SassOptions = {
-		sourceMap: true
-	};
+	const isProd = (metadata.ENV === 'production');
 
 	const loaders = {
-			"dtrace": { test: /dtrace-provider/, loader: 'empty-loader' },
+			"dtrace": {test: /dtrace-provider/, loader: 'empty-loader'},
 			"typescript": {
 				test: /\.ts$/,
 				use: [
@@ -38,20 +48,15 @@ module.exports = function (metadata, plugins) {
 								"sourceMaps": false,
 								"inlineSourceMap": true
 							}) : tsConfig.compilerOptions,
-							configFileName: 'tsconfig.webpack.json',
 							transpileOnly: TEST,
-							sourceMap: true,
-							inlineSourceMap: TEST
 						}
 					},
-					{ loader: 'angular2-template-loader' }
+					{loader: 'angular2-template-loader'}
 				],
-				exclude: [/\.(spec|e2e)\.ts$/]
-				// exclude: [/node_modules/]
 			},
 			"es6": {
 				test: /\.js$/,
-				use: [{ loader: 'babel-loader' }],
+				use: [{loader: 'babel-loader'}],
 				exclude: [/node_modules/
 					, /ribbon-tab-items\.data/
 					, /pma\.initial\.state/]
@@ -70,52 +75,49 @@ module.exports = function (metadata, plugins) {
 				}],
 			},
 			"json": {
-				test: /\.json$/, use: [{ loader: 'json-loader' }]
+				test: /\.json$/, use: [{loader: 'json-loader'}]
 			},
 			"css": {
 				test: /\.css$/,
 				exclude: [/\.component\.css/],
-				use: TEST ? [{ loader: 'empty-loader' }]
+				use: TEST ? [{loader: 'empty-string-loader'}]
 					:
-					[{ loader: 'style-loader' },
-						{ loader: 'css-loader', options: { sourceMap: true } },
-						{ loader: 'postcss-loader' }, //postcss options is given via LoaderOptionsPlugin
+					[{loader: 'style-loader'},
+						loaderObjects.css,
+						loaderObjects.postCss
 					],
 			},
 			"componentCss": {
 				test: /component\.css$/,
-				use: TEST ? [{ loader: 'empty-loader' }]
-					:
-					[{ loader: 'css-to-string-loader' }, { loader: 'css-loader', options: { sourceMap: true } },
-						{ loader: 'postcss-loader' }, //postcss options is given via LoaderOptionsPlugin
-					],
+				use: TEST ? [{loader: 'empty-string-loader'}]
+					: [{loader: 'css-to-string-loader'}, loaderObjects.css, loaderObjects.postCss],
 			},
 			"woff": {
 				test: /\.woff(\?v=\d+\.\d+\.\d+)?$/,
 				use: [{
 					loader: 'url-loader',
-					options: { name: 'assets/fonts/[name].[ext]?[hash]', limit: 10000, mimetype: 'application/font-woff' }
+					options: {name: 'assets/fonts/[name].[ext]?[hash]', limit: 10000, mimetype: 'application/font-woff'}
 				}]
 			},
 			"woff2": {
 				test: /\.woff2(\?v=\d+\.\d+\.\d+)?$/,
 				use: [{
 					loader: 'url-loader',
-					options: { name: 'assets/fonts/[name].[ext]?[hash]', limit: 10000, mimetype: 'application/font-woff' }
+					options: {name: 'assets/fonts/[name].[ext]?[hash]', limit: 10000, mimetype: 'application/font-woff'}
 				}]
 			},
 			"ttf": {
 				test: /\.ttf(\?v=\d+\.\d+\.\d+)?$/,
 				use: [{
 					loader: 'url-loader',
-					options: { name: 'assets/fonts/[name].[ext]?[hash]', limit: 10000, mimetype: 'application/octet-stream' }
+					options: {name: 'assets/fonts/[name].[ext]?[hash]', limit: 10000, mimetype: 'application/octet-stream'}
 				}]
 			},
 			"eot": {
 				test: /\.eot(\?v=\d+\.\d+\.\d+)?$/,
 				use: [{
 					loader: "file-loader",
-					options: { name: 'assets/fonts/[name].[ext]?[hash]' }
+					options: {name: 'assets/fonts/[name].[ext]?[hash]'}
 				}]
 			},
 			"svg": {
@@ -123,57 +125,50 @@ module.exports = function (metadata, plugins) {
 				exclude: [/\.icon\.svg/],
 				use: [{
 					loader: 'url-loader',
-					options: { name: 'assets/fonts/[name].[ext]?[hash]', limit: 10000, mimetype: 'image/svg+xml' }
+					options: {name: 'assets/fonts/[name].[ext]?[hash]', limit: 10000, mimetype: 'image/svg+xml'}
 				}]
 			},
 			"svgIcon": {
 				test: /\.icon\.svg(\?v=\d+\.\d+\.\d+)?$/,
 				use: [{
 					loader: 'url-loader',
-					options: { name: 'assets/images/[name].[ext]?[hash]', limit: 10000, mimetype: 'image/svg+xml' }
+					options: {name: 'assets/images/[name].[ext]?[hash]', limit: 10000, mimetype: 'image/svg+xml'}
 				}]
 			},
 			"png": {
 				test: /\.png(\?.*)?$/,
 				use: [{
 					loader: 'url-loader',
-					options: { name: 'assets/images/[name].[ext]?[hash]', limit: 10000, mimetype: 'image/png' }
+					options: {name: 'assets/images/[name].[ext]?[hash]', limit: 10000, mimetype: 'image/png'}
 				}]
 			},
 			"jpg": {
 				test: /\.(jpeg|jpg)(\?.*)?$/,
 				use: [{
 					loader: 'file-loader',
-					options: { name: 'assets/images/[name].[ext]?[hash]', mimetype: 'image/jpeg' }
+					options: {name: 'assets/images/[name].[ext]?[hash]', mimetype: 'image/jpeg'}
 				}]
 			},
 			"gif": {
 				test: /\.gif(\?.*)?$/,
 				use: [{
 					loader: 'url-loader',
-					options: { name: 'assets/images/[name].[ext]?[hash]', limit: 10000, mimetype: 'image/gif' }
+					options: {name: 'assets/images/[name].[ext]?[hash]', limit: 10000, mimetype: 'image/gif'}
 				}]
 			},
 			'sass': {
 				test: /\.scss$/,
 				exclude: [/\.component\.scss/],
-				use: TEST ? [{ loader: 'empty-loader' }] :
-					[{ loader: 'style-loader' }, { loader: 'css-loader', options: { sourceMap: true } },
-						{ loader: 'postcss-loader' }, //postcss options is given via LoaderOptionsPlugin
-						{ loader: 'resolve-url-loader' },
-						{
-							loader: 'sass-loader', options: Object.assign({}, SassOptions)
-						}]
+				use: TEST ? [{loader: 'empty-loader'}] :
+					[{loader: 'style-loader'}, loaderObjects.css, loaderObjects.postCss,
+						{loader: 'resolve-url-loader'}, loaderObjects.sass
+					]
 			},
 			'component.sass': {
 				test: /\.component\.scss/,
-				use: TEST ? [{ loader: 'css-to-string-loader' }, { loader: 'empty-loader' }] :
-					[{ loader: 'css-to-string-loader' }, { loader: 'css-loader', options: { sourceMap: true } },
-						{ loader: 'postcss-loader' }, //postcss options is given via LoaderOptionsPlugin
-						{ loader: 'resolve-url-loader' },
-						{
-							loader: 'sass-loader', options: Object.assign({}, SassOptions)
-						}]
+				use: TEST ? [{loader: 'css-to-string-loader'}, {loader: 'empty-loader'}] :
+					[{loader: 'css-to-string-loader'}, loaderObjects.css, loaderObjects.postCss, {loader: 'resolve-url-loader'},
+						loaderObjects.sass]
 			}
 		}
 	;
@@ -205,7 +200,7 @@ module.exports = function (metadata, plugins) {
 			enforce: 'pre',
 			test: /\.ts$/,
 			loader: 'tslint-loader',
-			exclude: [/node_modules/, /web-ui-core[\/|\\]/] // (nadav) todo find how not to write the string web-ui-core here..
+			include: [/src\//]
 		};
 
 		loaders.sourcemapPreloader = {

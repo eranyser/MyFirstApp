@@ -26,6 +26,7 @@
 	},
 	"exclude": [
 		"dist",
+		"compiled",
 		"node_modules"
 	],
 	"awesomeTypescriptLoaderOptions": {

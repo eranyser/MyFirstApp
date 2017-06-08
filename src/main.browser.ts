@@ -1,12 +1,12 @@
 /*
  * Angular bootstraping
  */
-import {platformBrowserDynamic} from "@angular/platform-browser-dynamic";
-import {decorateModuleRef} from "./app/environment";
-import {PackageID, log} from "./app/common/services/log";
+import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
+import {decorateModuleRef} from './app/environment';
+import {log, PackageID} from './app/common/services/log';
 import {bootloader} from '@angularclass/hmr';
-import {AppModule} from "./app";
-// import "./svg-spritemap.loader.js"; /// this allows for SVG icons
+import {AppModule} from './app';
+import './common.app.preboot.behaviour';
 /*
  * App Module
  * our top level module that holds all of our components
@@ -15,7 +15,6 @@ import {AppModule} from "./app";
 /*
  * Bootstrap our Angular app with a top level NgModule
  */
-
 
 export function main(): Promise<any> {
 	return platformBrowserDynamic()

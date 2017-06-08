@@ -8,19 +8,19 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="<%= htmlWebpackPlugin.options.metadata.title %>">
-	<link rel="stylesheet" href="assets/css/loading.css">
+	<!-- base url -->
+	<base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
+	<script>
+		window.baseUrl ="<%= htmlWebpackPlugin.options.metadata.baseUrl %>";
+	</script>
 	<% if (webpackConfig.htmlElements.headTags) { %>
 	<!-- Configured Head Tags  -->
 	<%= webpackConfig.htmlElements.headTags %>
 	<% } %>
-    <!-- base url -->
-    <base href="<%= htmlWebpackPlugin.options.metadata.baseUrl %>">
-	<script>
-		window.baseUrl ="<%= htmlWebpackPlugin.options.metadata.baseUrl %>";
-	</script>
+	<link rel="stylesheet" href="assets/css/loading.css"/>
 
 </head>
-<body class="default">
+<body>
 <alg-app>
 	<div class="entire-body-div">
 		<div class="loading-div">
@@ -42,6 +42,5 @@
 	</div>
 </alg-app>
 <!--todo:add Google Analytics etc here -->
-<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 </body>
 </html>

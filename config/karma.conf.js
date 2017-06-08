@@ -1,5 +1,8 @@
 "use strict";
-
+process.on('unhandledRejection', (reason) => {
+	console.log(reason.stack);
+	console.log('Reason: ' + reason);
+});
 /**
  * @author: @AngularClass
  */
@@ -26,7 +29,7 @@ module.exports = function (config) {
 			"/assets/": "/base/src/assets/"
 		},
 		preprocessors: {
-			'./config/spec-bundle.js': coverage ? ['coverage', 'webpack', 'sourcemap'] : ['webpack', 'sourcemap'],
+			'./config/spec-bundle.js': coverage ? ['webpack', 'sourcemap'] : ['webpack', 'sourcemap'],
 		},
 		specReporter: {
 			maxLogLines: 5,
@@ -39,7 +42,7 @@ module.exports = function (config) {
 		webpackMiddleware: {
 			stats: 'errors-only'
 		},
-		reporters: coverage ? ['mocha', 'coverage', 'junit', 'remap-coverage'] : ['mocha', 'junit'],
+		reporters: coverage ? ['mocha', 'junit', 'karma-remap-istanbul'] : ['mocha', 'junit'],
 		junitReporter: {
 			outputDir: 'coverage',
 			// results will be saved as $outputDir/$browserName.xml
@@ -91,17 +94,24 @@ module.exports = function (config) {
 
 	if (coverage) {
 		Object.assign(config, {
-			coverageReporter: {
-				type: 'in-memory'
+			remapIstanbulReporter: {
+				remapOptions: {basePath:path.resolve('../src')}, //additional remap options
+				reportOptions: {}, //additional report options
+				reports: {
+					html: 'coverage/html'
+				}
 			},
-			remapCoverageReporter: {
-				'text-summary': null,
-				json: './coverage/coverage.json',
-				html: './coverage/html'
-			},
-			// remapOptions: {
-			// 	basePath: './src'
+			// coverageReporter: {
+			// 	type: 'in-memory'
 			// },
+			// remapCoverageReporter: {
+			// 	'text-summary': null,
+			// 	json: './coverage/coverage.json',
+			// 	html: './coverage/html'
+			// },
+			//  remapOptions: {
+			//  	basePath: path.resolve('../src/app')
+			//  },
 		});
 	}
 	if (process.env.TRAVIS) {

@@ -13,7 +13,7 @@ def parse_commit(projects,commit_msg):
 		if match:
 			commit_id = match.group(0)
 			return project, commit_id
-	return False
+	return '', ''
 
 def get_issue(project,issue_id):
 	issue = jira_session.search_issues("project = \"{}\" AND issuekey = {}".format(project, issue_id))
@@ -73,8 +73,8 @@ def main():
 		if issue_id:
 			commit_url = "{}/{}/commit/{}".format(git_url,build_teamproject,commit_id)
 		else:
-			err = "\n\nCommit id is invalid.\n\n"
-			sys.exit(err)
+			print "\n\nCommit id is invalid.\n\n"
+			sys.exit(1)
 
 		#initilize jira session
 		jira_session = jira_init()

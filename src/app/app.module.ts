@@ -1,20 +1,9 @@
 import {BrowserModule} from '@angular/platform-browser';
 import {FormsModule} from '@angular/forms';
 import {HttpModule} from '@angular/http';
-import {
-	NgModule,
-	ApplicationRef
-} from '@angular/core';
-import {
-	removeNgStyles,
-	createNewHosts,
-	createInputTransfer
-} from '@angularclass/hmr';
-import {
-	RouterModule,
-	PreloadAllModules
-} from '@angular/router';
-
+import {ApplicationRef, NgModule} from '@angular/core';
+import {createInputTransfer, createNewHosts, removeNgStyles} from '@angularclass/hmr';
+import {PreloadAllModules, RouterModule} from '@angular/router';
 /*
  * Platform and Environment providers/directives/pipes
  */
@@ -37,11 +26,11 @@ const APP_PROVIDERS = [
 	AppState
 ];
 
-type StoreType = {
-	state: InternalStateType,
-	restoreInputValues: () => void,
-	disposeOldHosts: () => void
-};
+interface IStoreType {
+	state: InternalStateType;
+	restoreInputValues: () => void;
+	disposeOldHosts: () => void;
+}
 
 /**
  * `AppModule` is the main entry point into Angular2's bootstraping process
@@ -68,12 +57,10 @@ type StoreType = {
 })
 export class AppModule {
 
-	constructor(
-		public appRef: ApplicationRef,
-		public appState: AppState
-	) {}
+	constructor(public appRef: ApplicationRef, public appState: AppState) {
+	}
 
-	public hmrOnInit(store: StoreType) {
+	public hmrOnInit(store: IStoreType) {
 		if (!store || !store.state) {
 			return;
 		}
@@ -82,7 +69,7 @@ export class AppModule {
 		this.appState._state = store.state;
 		// set input values
 		if ('restoreInputValues' in store) {
-			let restoreInputValues = store.restoreInputValues;
+			const restoreInputValues = store.restoreInputValues;
 			setTimeout(restoreInputValues);
 		}
 
@@ -91,7 +78,7 @@ export class AppModule {
 		delete store.restoreInputValues;
 	}
 
-	public hmrOnDestroy(store: StoreType) {
+	public hmrOnDestroy(store: IStoreType) {
 		const cmpLocation = this.appRef.components.map((cmp) => cmp.location.nativeElement);
 		// save state
 		const state = this.appState._state;
@@ -104,7 +91,7 @@ export class AppModule {
 		removeNgStyles();
 	}
 
-	public hmrAfterDestroy(store: StoreType) {
+	public hmrAfterDestroy(store: IStoreType) {
 		// display new elements
 		store.disposeOldHosts();
 		delete store.disposeOldHosts;
