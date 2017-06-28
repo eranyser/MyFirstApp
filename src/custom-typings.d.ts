@@ -1,3 +1,4 @@
+/* tslint:disable */
 /*
  * Custom Type Definitions
  * When including 3rd party modules you also need to include the type definition for the module
@@ -45,7 +46,7 @@
 
 // support NodeJS modules without type definitions
 /// <reference types="node" />
-declare module '*'
+declare module '*';
 
 // Extra variables that live on Global that will be replaced by webpack DefinePlugin
 declare var ENV: string;
@@ -180,11 +181,4 @@ interface Thenable<T> {
 }
 declare function postMessage(message: any): void;
 
-interface Navigator {
-	cpuClass: string;
-}
-
-interface String {
-	leftPad(length: number, fillStr: string): string;
-	rightPad(length: number, fillStr: string): string;
-}
+// tslint:enable //
