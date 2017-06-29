@@ -42,7 +42,7 @@
   },
   "license": "UNLICSENCED",
   "dependencies": {
-	"@algotec/browser-helpers":"~2.0.0",
+	"@algotec/browser-helpers":"~2.1.0",
     "@angular/animations": "^4.1.0",
     "@angular/common": "~4.1.0",
     "@angular/compiler": "~4.1.0",
