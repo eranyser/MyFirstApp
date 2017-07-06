@@ -165,7 +165,7 @@ module.exports = function (metadata, plugins) {
 					]
 			},
 			'component.sass': {
-				test: /\.component\.scss/,
+				test: /\.component\.scss$/,
 				use: TEST ? [{loader: 'css-to-string-loader'}, {loader: 'empty-loader'}] :
 					[{loader: 'css-to-string-loader'}, loaderObjects.css, loaderObjects.postCss, {loader: 'resolve-url-loader'},
 						loaderObjects.sass]
