@@ -36,37 +36,16 @@ const CompressionPlugin = require('compression-webpack-plugin');
 module.exports = function (metadata) {
 	const isProduction = metadata.ENV === 'production';
 	const plugins = {
-		"assets": new AssetsPlugin({
-			                           path: helpers.root('dist'),
-			                           filename: 'webpack-assets.json',
-			                           prettyPrint: true
-		                           }),
+		// "assets": new AssetsPlugin({
+		// 	                           path: helpers.root('dist'),
+		// 	                           filename: 'webpack-assets.json',
+		// 	                           prettyPrint: true
+		//                            }),
 		"ngc": new ngcWebpack.NgcWebpackPlugin({
 			                                       disabled: !metadata.AOT,
 			                                       tsConfig: helpers.root('tsconfig.webpack.json'),
 			                                       resourceOverride: helpers.root('config/resource-override.js')
 		                                       }),
-		"fix": new webpack.ContextReplacementPlugin( 	//see https://github.com/angular/angular/issues/11580
-		                                                // The (\\|\/) piece accounts for path separators in *nix and Windows
-		                                                /angular(\\|\/)core(\\|\/)(esm(\\|\/)src|src)(\\|\/)linker/,
-		                                                helpers.root('src')  // location of your src
-		),
-		"fork": new CheckerPlugin(),
-		"SvgStore": new SvgStore({
-			                         svgoOptions: { // svgo options https://github.com/svg/svgo
-				                         plugins: [
-					                         {removeStyleElement: true},
-					                         {collapseGroups: true},
-					                         {cleanupIDs: true},
-					                         {removeDimensions: true}
-				                         ]
-			                         }
-		                         }),
-		"Paths": new TsConfigPathsPlugin(),
-		// "provide": new webpack.ProvidePlugin({
-		// 	$: "jquery",
-		// 	jQuery: "jquery"
-		// }),
 		/**
 		 * Plugin: ContextReplacementPlugin
 		 * Description: Provides context to Angular's use of System.import
@@ -82,16 +61,6 @@ module.exports = function (metadata) {
 			{
 				// your Angular Async Route paths relative to this root directory
 			}),
-		"html": new HtmlWebpackPlugin({ // https://github.com/ampedandwired/html-webpack-plugin
-			                              minify: (metadata.ENV === 'production') ? {removeComments: true} : false, // https://github.com/kangax/html-minifier#options-quick-reference
-			                              metadata: metadata,
-			                              inject: 'head', // but we use defer so this is actually evaluated at body load end
-			                              hash: true,
-			                              chunksSortMode: 'dependency',
-			                              template: 'src/index.tmpl.html',
-			                              //     chunks:'viewer',  // when doing angular in webworkers we must make use of these to omit the webworker chunk
-			                              filename: 'index.html'
-		                              }),
 		/*
 		 * Plugin: HtmlHeadConfigPlugin
 		 * Description: Generate html tags based on javascript maps.
@@ -114,7 +83,7 @@ module.exports = function (metadata) {
 		 *
 		 * Dependencies: HtmlWebpackPlugin
 		 */
-		"headTags": new HtmlElementsPlugin({headTags: require('./head-config.common')}),
+		// "headTags": new HtmlElementsPlugin({headTags: require('./head-config.common')}),
 		"define": new webpack.DefinePlugin({
 			                                   'ENV': JSON.stringify(metadata.ENV),
 			                                   'HMR': metadata.HMR,
@@ -159,29 +128,6 @@ module.exports = function (metadata) {
 			                                    defaultAttribute: 'defer'
 		                                    })
 	};
-	if (metadata.ENV !== 'test') {
-		plugins.copy = new CopyWebpackPlugin([
-			                                     {from: 'src/assets', to: 'assets'},
-		                                     ]);
-
-		plugins.commonChunks0 = new CommonsChunkPlugin({
-			                                               name: 'polyfills',
-			                                               chunks: ['polyfills']
-		                                               });
-		// This enables tree shaking of the vendor modules
-		plugins.commonChunks1 = new CommonsChunkPlugin({
-			                                               name: 'vendor',
-			                                               chunks: ['main'],
-			                                               minChunks: module => /node_modules/.test(module.resource)
-		                                               });
-		// Specify the correct order the scripts will be injected in
-		plugins.commonChunks2 = new CommonsChunkPlugin({
-			                                               name: ['polyfills', 'vendor'].reverse()
-		                                               });
-
-
-		// plugins.extractText = new ExtractTextPlugin({name:"assets/css/[name].css",disabled: metadata.ENV !== 'production'});
-	}
 
 	if (isProduction) {
 		plugins.compress = new CompressionPlugin({
@@ -259,14 +205,6 @@ module.exports = function (metadata) {
 			);
 		}
 	} else {
-		/*Plugin: NamedModulesPlugin (experimental)
-		 * Description: Uses file names as module name.
-		 *
-		 * See: https://github.com/webpack/webpack/commit/a04ffb928365b19feb75087c63f13cadfc08e1eb
-
-		 */
-		plugins.names = new NamedModulesPlugin();
-		// if (metadata.env !== 'test') {
 		plugins.dll = new DllBundlesPlugin({
 			                                   bundles: dllBundles,
 			                                   dllDir: helpers.root('dll'),

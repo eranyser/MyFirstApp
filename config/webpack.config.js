@@ -5,31 +5,16 @@ const webpack = require('webpack');
 const helpers = require('./helpers');
 const webpackMerge = require('webpack-merge');
 const commonConfig = require('./webpack.common.config');
+const webConfig = require('@algotec/web-config');
 
-module.exports = function webpackConfig (options = {}) {
-	const ENV = options.env || process.env.NODE_ENV || 'development';
-	const HMR = helpers.hasProcessFlag('hot');
-
-	///baseMeta is our options schema and defaults, things that end up in configuration must start here,
-	// most of it is derived out of environment variables with superseding runtime arguments then defaults
-	const metaData = {
-		silent: helpers.isSilentMode(),
-		host: process.env.HOST || 'localhost',
-		port: process.env.PORT || 8080,
-		ENV: ENV,
-		HMR: HMR,
-		coverage: eval(helpers.getOption('coverage', options, true)),
-		title: 'Carestream Base Angular Web App',
-		baseUrl: helpers.getOption('CLIENT_BASE_URL', options, undefined) || '.',
-		isDevServer: helpers.isWebpackDevServer(),
-		AOT: Boolean(helpers.getOption('AOT', options, false)),
-	};
+function appBaseWebpackConfig(options = {}) {
+	const metaData = webConfig.createMetadata(options, {title: 'Carestream Base Angular Web App'});
 	if (metaData.baseUrl !== '.')
 		metaData.baseUrl = '/' + metaData.baseUrl;
 
 	if (!metaData.silent) { // please keep any console.logs only inside this block
 		console.log('Using BaseUrl of ', metaData.baseUrl);
-		if (ENV === 'test') {
+		if (metaData.ENV === 'test') {
 			console.log('coverage is ' + ((metaData.coverage) ? 'enabled' : 'disabled!'));
 		}
 	}
@@ -40,7 +25,7 @@ module.exports = function webpackConfig (options = {}) {
 			rules: _.values(require('./webpack.loaders')(metaData, webpackPlugins))
 		},
 	});
-	if (ENV === 'development') {
+	if (metaData.ENV === 'development') {
 		config.devServer = {
 			port: metaData.port,
 			host: metaData.host,
@@ -58,10 +43,10 @@ module.exports = function webpackConfig (options = {}) {
 		};
 	}
 
-	if (ENV === 'test') {
+	if (metaData.ENV === 'test') {
 		config.entry = './config/spec-bundle.js';
 	}
-	if (ENV !== 'test') {
+	if (metaData.ENV !== 'test') {
 		config.output = {
 			path: helpers.root('dist'),
 			filename: '[name].[hash].bundle.js',
@@ -71,3 +56,11 @@ module.exports = function webpackConfig (options = {}) {
 	}
 	return config;
 };
+
+module.exports = function(runtimeOpts){
+	const metaData = webConfig.createMetadata(runtimeOpts, {title: 'Carestream Base Angular Web App'});
+
+	const webpackBuilder = webConfig.webpackBuilder(metaData);
+	const config = webpackBuilder.extend(appBaseWebpackConfig).build();
+	return config(runtimeOpts);
+}
