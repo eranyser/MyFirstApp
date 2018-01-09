@@ -1,25 +1,6 @@
 ﻿{
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
-		"target": "es5",
-		"module": "es2015",
-		"moduleResolution": "node",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"sourceMap": true,
-		"noEmitHelpers": true,
-		"importHelpers":true,
-		"strictNullChecks": false,
-		"baseUrl": "./src",
-		"lib": [
-			"dom",
-			"es6",
-			"scripthost",
-			"es2015",
-			"es2016",
-			"es2017"
-		],
-		"typeRoots": [ "./node_modules/@types" ],
 		"outDir": "./compiled",
 		"rootDir": "./src/app"
 	},
@@ -30,17 +11,6 @@
 		"dist",
 		"node_modules"
 	],
-	"awesomeTypescriptLoaderOptions": {
-		"resolveGlobs": true,
-		"forkChecker": true,
-		"useCache": true,
-		"useWebpackText": true
-	},
-	"compileOnSave": false,
-	"buildOnSave": false,
-	"atom": {
-		"rewriteTsconfig": false
-	},
 	"angularCompilerOptions": {
 		"debug": true
 	}

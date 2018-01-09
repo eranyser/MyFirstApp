@@ -1,48 +1,19 @@
 {
+	"extends": "./tsconfig.json",
 	"compilerOptions": {
-		"target": "es5",
-		"module": "es2015",
-		"moduleResolution": "node",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"forceConsistentCasingInFileNames": true,
-		"sourceMap": true,
-		"skipLibCheck": true,
-		"noEmit": true,
-		"noEmitHelpers": true,
-		"importHelpers": true,
-		"strictNullChecks": false,
-		"lib": [
-			"es2015",
-			"dom"
+		"exclude": [
+			"node_modules",
+			"dist",
+			"src/**/*.spec.ts",
+			"src/**/*.e2e.ts"
 		],
-		"typeRoots": [
-			"node_modules/@types"
-		],
-		"types": [
-			"hammerjs",
-			"node"
-		]
-	},
-	"exclude": [
-		"node_modules",
-		"dist",
-		"src/**/*.spec.ts",
-		"src/**/*.e2e.ts"
-	],
-	"awesomeTypescriptLoaderOptions": {
-		"forkChecker": true,
-		"useCache": true,
-		"useWebpackText": true
-	},
-	"angularCompilerOptions": {
-		"genDir": "./compiled",
-		"skipMetadataEmit": true
-	},
-	"compileOnSave": false,
-	"buildOnSave": false,
-	"atom": {
-		"rewriteTsconfig": false
+		"awesomeTypescriptLoaderOptions": {
+			"forkChecker": true,
+			"useCache": true,
+			"useWebpackText": true
+		},
+		"angularCompilerOptions": {
+			"genDir": "./compiled",
+			"skipMetadataEmit": true
+		}
 	}
-}

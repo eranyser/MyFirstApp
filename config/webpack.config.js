@@ -7,8 +7,7 @@ const webpackMerge = require('webpack-merge');
 const commonConfig = require('./webpack.common.config');
 const webConfig = require('@algotec/web-config');
 
-function appBaseWebpackConfig(options = {}) {
-	const metaData = webConfig.createMetadata(options, {title: 'Carestream Base Angular Web App'});
+function appBaseWebpackConfig(metaData = {}) {
 	if (metaData.baseUrl !== '.')
 		metaData.baseUrl = '/' + metaData.baseUrl;
 
@@ -19,7 +18,7 @@ function appBaseWebpackConfig(options = {}) {
 		}
 	}
 	const webpackPlugins = require('./webpack.plugins.js')(metaData);
-	const config = webpackMerge(commonConfig(options), {
+	const config = webpackMerge(commonConfig(metaData), {
 		plugins: _.values(webpackPlugins),
 		module: {
 			rules: _.values(require('./webpack.loaders')(metaData, webpackPlugins))
@@ -58,9 +57,11 @@ function appBaseWebpackConfig(options = {}) {
 };
 
 module.exports = function(runtimeOpts){
-	const metaData = webConfig.createMetadata(runtimeOpts, {title: 'Carestream Base Angular Web App'});
+	runtimeOpts.title = 'Carestream Base Angular Web App';
+	runtimeOpts.rootElementSelector = "alg-app";
+	const metaData = webConfig.createMetadata(runtimeOpts);
 
 	const webpackBuilder = webConfig.webpackBuilder(metaData);
 	const config = webpackBuilder.extend(appBaseWebpackConfig).build();
-	return config(runtimeOpts);
+	return config(metaData);
 }

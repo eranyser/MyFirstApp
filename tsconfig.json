@@ -1,46 +1,14 @@
 ﻿{
+	"extends": "./node_modules/@algotec/web-config/tsconfig.browser.module.json",
 	"compilerOptions": {
-		"target": "es5",
-		"module": "es2015",
-		"moduleResolution": "node",
-		"emitDecoratorMetadata": true,
-		"experimentalDecorators": true,
-		"allowSyntheticDefaultImports": true,
-		"forceConsistentCasingInFileNames":true,
-		"sourceMap": true,
-		"skipLibCheck": true,
-		"importHelpers": true,
-		"noEmitHelpers": true,
-		"strictNullChecks": false,
-		"baseUrl": "./src",
-		"paths": [
+		"typeRoots": [
+			"./node_modules/@types"
 		],
-		"lib": [
-			"dom",
-			"es6",
-			"scripthost",
-			"es2015",
-			"es2016",
-			"es2017"
-		]
+		"baseUrl": "./src"
 	},
 	"exclude": [
 		"dist",
 		"compiled",
 		"node_modules"
-	],
-	"awesomeTypescriptLoaderOptions": {
-		"resolveGlobs": true,
-		"forkChecker": true,
-		"useCache": true,
-		"useWebpackText": true
-	},
-	"compileOnSave": false,
-	"buildOnSave": false,
-	"atom": {
-		"rewriteTsconfig": false
-	},
-	"angularCompilerOptions": {
-		"debug": true
-	}
+	]
 }
